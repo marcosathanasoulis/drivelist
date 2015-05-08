@@ -7,7 +7,7 @@ _ = require('lodash');
 tableParser = require('table-parser');
 
 exports.list = function(callback) {
-  return childProcess.exec('wmic diskdrive get DeviceID, Caption, Size', {}, function(error, stdout, stderr) {
+  return childProcess.exec('wmic diskdrive get DeviceID, Caption, Size, Name', {}, function(error, stdout, stderr) {
     var result;
     if (error != null) {
       return callback(error);
@@ -25,6 +25,7 @@ exports.list = function(callback) {
       return {
         device: _.last(row.DeviceID),
         description: row.Caption.join(' '),
+        name: row.Name.join(' '),
         size: size != null ? "" + (Math.floor(size)) + " GB" : void 0
       };
     });
