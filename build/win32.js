@@ -25,7 +25,7 @@ exports.list = function(callback) {
       return {
         device: _.last(row.DeviceID),
         description: row.Caption.join(' '),
-        name: row.Name.join(' '),
+        name: row.Name,
         size: size != null ? "" + (Math.floor(size)) + " GB" : void 0
       };
     });
