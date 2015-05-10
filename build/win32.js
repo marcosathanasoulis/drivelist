@@ -1,12 +1,4 @@
 
-
-drivelist/build/win32.js
-@marcosathanasoulis marcosathanasoulis a day ago Update win32.js
-
-2 contributors
-@jviotti
-@marcosathanasoulis
-39 lines (33 sloc) 1.132 kb
 var childProcess, tableParser, _;
 
 childProcess = require('child_process');
