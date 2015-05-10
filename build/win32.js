@@ -1,3 +1,12 @@
+
+
+drivelist/build/win32.js
+@marcosathanasoulis marcosathanasoulis a day ago Update win32.js
+
+2 contributors
+@jviotti
+@marcosathanasoulis
+39 lines (33 sloc) 1.132 kb
 var childProcess, tableParser, _;
 
 childProcess = require('child_process');
@@ -7,7 +16,7 @@ _ = require('lodash');
 tableParser = require('table-parser');
 
 exports.list = function(callback) {
-  return childProcess.exec('powershell.exe "Get-WmiObject -class Win32_Volume | Select-Object DeviceID,DriveLetter"', {}, function(error, stdout, stderr) {
+  return childProcess.exec('wmic diskdrive get DeviceID, Caption, Size, Name', {}, function(error, stdout, stderr) {
     var result;
     if (error != null) {
       return callback(error);
@@ -17,12 +26,16 @@ exports.list = function(callback) {
     }
     result = tableParser.parse(stdout);
     result = _.map(result, function(row) {
+      var size, _ref;
+      size = _.parseInt((_ref = row.Size) != null ? _ref[0] : void 0) / 1e+9 || void 0;
       if (row.DeviceID.length > 1) {
         row.Caption = row.Caption.concat(_.initial(row.DeviceID));
       }
       return {
         device: _.last(row.DeviceID),
+        description: row.Caption.join(' '),
         name: row.Name,
+        size: size != null ? "" + (Math.floor(size)) + " GB" : void 0
       };
     });
     return callback(null, result);
